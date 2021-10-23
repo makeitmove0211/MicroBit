@@ -1,0 +1,95 @@
+Con1_x = 2
+Con2_x = 3
+stop = 0
+B_x = 0
+B_y = 0
+ran = 0
+
+def on_forever():
+    global Con1_x, Con2_x
+    if input.button_is_pressed(Button.A):
+        led.unplot(Con1_x, 4)
+        led.unplot(Con2_x, 4)
+        Con1_x = Con1_x - 1
+        Con2_x = Con2_x - 1
+        led.plot(Con1_x, 4)
+        led.plot(Con2_x, 4)
+        basic.pause(100)
+    if input.button_is_pressed(Button.B):
+        led.unplot(Con1_x, 4)
+        led.unplot(Con2_x, 4)
+        Con1_x = Con1_x + 1
+        Con2_x = Con2_x + 1
+        led.plot(Con1_x, 4)
+        led.plot(Con2_x, 4)
+        basic.pause(100)
+basic.forever(on_forever)
+
+def on_forever2():
+    global stop, B_x, B_y, ran, Con1_x, Con2_x
+    while stop == 0:
+        stop = 0
+        B_x = randint(0, 4)
+        B_y = 0
+        led.plot(B_x, B_y)
+        basic.pause(500)
+        ran = randint(0, 2)
+        if ran == 0:
+            while B_y < 4:
+                led.unplot(B_x, B_y)
+                B_y = B_y + 1
+                led.plot(B_x, B_y)
+                basic.pause(500)
+        if ran == 1:
+            while B_x < 4 and B_y < 4:
+                led.unplot(B_x, B_y)
+                B_x = B_x + 1
+                B_y = B_y + 1
+                led.plot(B_x, B_y)
+                basic.pause(500)
+            if B_y >= 4:
+                pass
+            else:
+                while B_y < 4:
+                    led.unplot(B_x, B_y)
+                    B_x = B_x - 1
+                    B_y = B_y + 1
+                    led.plot(B_x, B_y)
+                    basic.pause(500)
+        if ran == 2:
+            while B_x > 0 and B_y < 4:
+                led.unplot(B_x, B_y)
+                B_x = B_x - 1
+                B_y = B_y + 1
+                led.plot(B_x, B_y)
+                basic.pause(500)
+            if B_y > 4:
+                pass
+            else:
+                while B_y < 4:
+                    led.unplot(B_x, B_y)
+                    B_x = B_x + 1
+                    B_y = B_y + 1
+                    led.plot(B_x, B_y)
+                    basic.pause(500)
+        basic.pause(200)
+        if B_x == Con2_x or B_x == Con1_x:
+            music.play_melody("C D E F G A B C5 ", 800)
+            basic.pause(200)
+            led.plot(Con1_x, 4)
+            led.plot(Con2_x, 4)
+        else:
+            music.start_melody(music.built_in_melody(Melodies.POWER_DOWN),
+                MelodyOptions.ONCE)
+            basic.show_icon(IconNames.SKULL)
+            stop = 1
+    if input.logo_is_pressed():
+        basic.clear_screen()
+        music.start_melody(music.built_in_melody(Melodies.POWER_UP), MelodyOptions.ONCE)
+        basic.pause(1000)
+        stop = 0
+        Con1_x = 2
+        Con2_x = 3
+        led.plot(Con1_x, 4)
+        led.plot(Con2_x, 4)
+basic.forever(on_forever2)
